@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Details - Ly Music Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-music"></i>
+                    <span>Ly</span>
+                </a>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="songs.html" class="nav-link">Songs</a>
+                <a href="compositions.html" class="nav-link">Compositions</a>
+                <a href="discover.html" class="nav-link">Discover</a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" id="globalSearch" placeholder="Search..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-outline" onclick="showLoginModal()">Login</button>
+                    <button class="btn btn-primary" onclick="showRegisterModal()">Sign Up</button>
+                </div>
+                
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <div class="user-avatar" onclick="toggleUserDropdown()">
+                        <img src="" alt="User Avatar" id="userAvatar">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="dashboard.html" class="dropdown-item">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="loading-state" style="margin-top: 100px;">
+        <div class="container">
+            <div class="loading-spinner"></div>
+            <p>Loading song details...</p>
+        </div>
+    </div>
+
+    <!-- Song Details -->
+    <div id="songContent" style="display: none;">
+        <!-- Song Header -->
+        <section class="song-header">
+            <div class="container">
+                <div class="song-hero">
+                    <div class="song-cover">
+                        <div id="songCoverImage" class="cover-image">
+                            <i class="fas fa-music"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="song-info">
+                        <div class="breadcrumb">
+                            <a href="songs.html">Songs</a>
+                            <i class="fas fa-chevron-right"></i>
+                            <span id="songBreadcrumb">Song Details</span>
+                        </div>
+                        
+                        <h1 id="songTitle" class="song-title">Loading...</h1>
+                        <h2 id="songArtist" class="song-artist">Loading...</h2>
+                        
+                        <div class="song-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-tags"></i>
+                                <span id="songGenre">Loading...</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span id="songDuration">Loading...</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-calendar"></i>
+                                <span id="songYear">Loading...</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-language"></i>
+                                <span id="songLanguage">Loading...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="song-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-eye"></i>
+                                <span id="songViews">0</span>
+                                <small>Views</small>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-music"></i>
+                                <span id="songCompositions">0</span>
+                                <small>Compositions</small>
+                            </div>
+                        </div>
+                        
+                        <div class="song-instruments" id="songInstruments">
+                            <!-- Instrument tags will be added here -->
+                        </div>
+                        
+                        <div class="song-actions">
+                            <button class="btn btn-primary" onclick="createComposition()" data-auth-required style="display: none;">
+                                <i class="fas fa-plus"></i> Create Composition
+                            </button>
+                            <button class="btn btn-outline" onclick="editSong()" id="editSongBtn" style="display: none;">
+                                <i class="fas fa-edit"></i> Edit Song
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Song Content Tabs -->
+        <section class="song-content">
+            <div class="container">
+                <div class="content-tabs">
+                    <button class="tab-btn active" data-tab="lyrics">
+                        <i class="fas fa-align-left"></i> Official Lyrics
+                    </button>
+                    <button class="tab-btn" data-tab="compositions">
+                        <i class="fas fa-music"></i> Compositions (<span id="compositionsCount">0</span>)
+                    </button>
+                    <button class="tab-btn" data-tab="info">
+                        <i class="fas fa-info-circle"></i> Song Info
+                    </button>
+                </div>
+
+                <!-- Lyrics Tab -->
+                <div class="tab-content active" id="lyricsTab">
+                    <div class="lyrics-container">
+                        <div class="lyrics-header">
+                            <h3>Official Lyrics</h3>
+                            <div class="lyrics-actions">
+                                <button class="btn btn-outline btn-sm" onclick="copyLyrics()">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                                <button class="btn btn-outline btn-sm" onclick="printLyrics()">
+                                    <i class="fas fa-print"></i> Print
+                                </button>
+                            </div>
+                        </div>
+                        <div class="lyrics-content" id="songLyrics">
+                            Loading lyrics...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compositions Tab -->
+                <div class="tab-content" id="compositionsTab">
+                    <div class="compositions-header">
+                        <h3>Community Compositions</h3>
+                        <div class="compositions-filters">
+                            <select id="compositionInstrumentFilter">
+                                <option value="">All Instruments</option>
+                                <option value="guitar">Guitar</option>
+                                <option value="piano">Piano</option>
+                                <option value="violin">Violin</option>
+                                <option value="drums">Drums</option>
+                                <option value="vocals">Vocals</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <select id="compositionTypeFilter">
+                                <option value="">All Types</option>
+                                <option value="chords">Chords</option>
+                                <option value="tabs">Tabs</option>
+                                <option value="lyrics">Lyrics</option>
+                                <option value="arrangement">Arrangement</option>
+                            </select>
+                            <select id="compositionSortFilter">
+                                <option value="likes">Most Liked</option>
+                                <option value="createdAt">Newest</option>
+                                <option value="rating">Highest Rated</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="compositionsContainer" class="compositions-list">
+                        <!-- Compositions will be loaded here -->
+                    </div>
+                    
+                    <div id="noCompositions" class="empty-state" style="display: none;">
+                        <i class="fas fa-music"></i>
+                        <h4>No Compositions Yet</h4>
+                        <p>Be the first to create a composition for this song!</p>
+                        <button class="btn btn-primary" onclick="createComposition()" data-auth-required style="display: none;">
+                            <i class="fas fa-plus"></i> Create First Composition
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info Tab -->
+                <div class="tab-content" id="infoTab">
+                    <div class="song-details">
+                        <div class="details-grid">
+                            <div class="detail-card">
+                                <h4>Song Information</h4>
+                                <div class="detail-list">
+                                    <div class="detail-item">
+                                        <label>Title:</label>
+                                        <span id="infoTitle">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Artist:</label>
+                                        <span id="infoArtist">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Album:</label>
+                                        <span id="infoAlbum">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Genre:</label>
+                                        <span id="infoGenre">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Language:</label>
+                                        <span id="infoLanguage">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Release Year:</label>
+                                        <span id="infoYear">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <h4>Statistics</h4>
+                                <div class="stats-grid">
+                                    <div class="stat-card">
+                                        <i class="fas fa-eye"></i>
+                                        <div class="stat-info">
+                                            <span class="stat-number" id="infoViews">0</span>
+                                            <span class="stat-label">Views</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <i class="fas fa-music"></i>
+                                        <div class="stat-info">
+                                            <span class="stat-number" id="infoCompositions">0</span>
+                                            <span class="stat-label">Compositions</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <i class="fas fa-calendar"></i>
+                                        <div class="stat-info">
+                                            <span class="stat-number" id="infoAdded">-</span>
+                                            <span class="stat-label">Added</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <h4>Added By</h4>
+                                <div class="user-info" id="addedByInfo">
+                                    <div class="user-avatar">
+                                        <img id="addedByAvatar" src="" alt="User Avatar">
+                                    </div>
+                                    <div class="user-details">
+                                        <h5 id="addedByName">Loading...</h5>
+                                        <p id="addedByDate">Loading...</p>
+                                        <a href="#" id="addedByProfile" class="btn btn-outline btn-sm">View Profile</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="error-state" style="display: none; margin-top: 100px;">
+        <div class="container">
+            <div class="error-content">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Song Not Found</h3>
+                <p>The song you're looking for doesn't exist or has been removed.</p>
+                <a href="songs.html" class="btn btn-primary">Browse Songs</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome Back</h3>
+                <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+            
+            <button class="btn btn-google" onclick="loginWithGoogle()">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            
+            <p class="auth-switch">
+                Don't have an account? 
+                <a href="#" onclick="switchToRegister()">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Join the Community</h3>
+                <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="registerUsername" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="registerEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="registerPassword" placeholder="Password (min 6 characters)" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+            
+            <button class="btn btn-google" onclick="loginWithGoogle()">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            
+            <p class="auth-switch">
+                Already have an account? 
+                <a href="#" onclick="switchToLogin()">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/song-details.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Composition - Ly Music Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-music"></i>
+                    <span>Ly</span>
+                </a>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="songs.html" class="nav-link">Songs</a>
+                <a href="compositions.html" class="nav-link">Compositions</a>
+                <a href="discover.html" class="nav-link">Discover</a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" id="globalSearch" placeholder="Search..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <div class="user-menu">
+                    <div class="user-avatar" onclick="toggleUserDropdown()">
+                        <img src="" alt="User Avatar" id="userAvatar">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="dashboard.html" class="dropdown-item">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Create Composition Form -->
+    <div class="add-composition-container">
+        <div class="container">
+            <div class="form-header">
+                <div class="breadcrumb">
+                    <a href="dashboard.html">Dashboard</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Create Composition</span>
+                </div>
+                <h1>Create New Composition</h1>
+                <p>Share your musical arrangement, tabs, chords, or interpretation of a song with the community.</p>
+            </div>
+
+            <form id="addCompositionForm" class="add-composition-form">
+                <!-- Song Selection -->
+                <div class="form-section">
+                    <h3>Select Song</h3>
+                    <p class="section-description">Choose the song you want to create a composition for.</p>
+                    
+                    <div class="song-search-container">
+                        <div class="search-input-group">
+                            <input type="text" id="songSearch" placeholder="Search for a song by title or artist...">
+                            <button type="button" class="search-btn" onclick="searchSongs()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="songSearchResults" class="search-results">
+                            <!-- Search results will appear here -->
+                        </div>
+                        
+                        <div id="selectedSong" class="selected-song" style="display: none;">
+                            <div class="song-info">
+                                <div class="song-details">
+                                    <h4 id="selectedSongTitle">Selected Song</h4>
+                                    <p id="selectedSongArtist">Artist</p>
+                                </div>
+                                <button type="button" class="btn btn-outline btn-sm" onclick="clearSelectedSong()">
+                                    <i class="fas fa-times"></i> Change Song
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="songNotFound">
+                                    <span class="checkmark"></span>
+                                    Song not found? Add basic details below.
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div id="manualSongEntry" class="manual-song-entry" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="manualSongTitle">Song Title *</label>
+                                    <input type="text" id="manualSongTitle" placeholder="Enter song title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="manualSongArtist">Artist *</label>
+                                    <input type="text" id="manualSongArtist" placeholder="Enter artist name">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Composition Details -->
+                <div class="form-section">
+                    <h3>Composition Details</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="compositionTitle">Composition Title *</label>
+                            <input type="text" id="compositionTitle" name="title" required placeholder="e.g. Guitar Chords for Beginners">
+                        </div>
+                        <div class="form-group">
+                            <label for="compositionInstrument">Primary Instrument *</label>
+                            <select id="compositionInstrument" name="instrument" required>
+                                <option value="">Select instrument</option>
+                                <option value="guitar">Guitar</option>
+                                <option value="piano">Piano</option>
+                                <option value="violin">Violin</option>
+                                <option value="drums">Drums</option>
+                                <option value="vocals">Vocals</option>
+                                <option value="bass">Bass</option>
+                                <option value="saxophone">Saxophone</option>
+                                <option value="trumpet">Trumpet</option>
+                                <option value="flute">Flute</option>
+                                <option value="cello">Cello</option>
+                                <option value="harmonica">Harmonica</option>
+                                <option value="ukulele">Ukulele</option>
+                                <option value="banjo">Banjo</option>
+                                <option value="mandolin">Mandolin</option>
+                                <option value="harp">Harp</option>
+                                <option value="accordion">Accordion</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="compositionType">Composition Type *</label>
+                            <select id="compositionType" name="type" required>
+                                <option value="">Select type</option>
+                                <option value="chords">Chords</option>
+                                <option value="tabs">Tabs/Tablature</option>
+                                <option value="lyrics">Lyrics with Chords</option>
+                                <option value="sheet-music">Sheet Music</option>
+                                <option value="arrangement">Full Arrangement</option>
+                                <option value="cover">Cover Version</option>
+                                <option value="remix">Remix/Adaptation</option>
+                                <option value="tutorial">Tutorial/Lesson</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="compositionDifficulty">Difficulty Level *</label>
+                            <select id="compositionDifficulty" name="difficulty" required>
+                                <option value="">Select difficulty</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                                <option value="expert">Expert</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="compositionDescription">Description</label>
+                        <textarea id="compositionDescription" name="description" rows="3" placeholder="Describe your composition, playing techniques, or any special notes..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Composition Content -->
+                <div class="form-section">
+                    <h3>Composition Content *</h3>
+                    <p class="section-description">Enter your musical composition. Use proper formatting for chords, tabs, or notation.</p>
+                    
+                    <div class="composition-editor">
+                        <div class="editor-toolbar">
+                            <div class="toolbar-group">
+                                <button type="button" class="toolbar-btn" onclick="insertChord()" title="Insert Chord">
+                                    <i class="fas fa-music"></i> Chord
+                                </button>
+                                <button type="button" class="toolbar-btn" onclick="insertTab()" title="Insert Tab Line">
+                                    <i class="fas fa-lines-leaning"></i> Tab
+                                </button>
+                                <button type="button" class="toolbar-btn" onclick="insertSection('verse')" title="Add Section">
+                                    [Section]
+                                </button>
+                            </div>
+                            
+                            <div class="toolbar-group">
+                                <button type="button" class="toolbar-btn" onclick="formatContent('bold')" title="Bold">
+                                    <i class="fas fa-bold"></i>
+                                </button>
+                                <button type="button" class="toolbar-btn" onclick="formatContent('italic')" title="Italic">
+                                    <i class="fas fa-italic"></i>
+                                </button>
+                                <button type="button" class="toolbar-btn" onclick="formatContent('monospace')" title="Monospace">
+                                    <i class="fas fa-font"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="toolbar-group">
+                                <button type="button" class="toolbar-btn" onclick="loadTemplate()" title="Load Template">
+                                    <i class="fas fa-file-import"></i> Template
+                                </button>
+                                <button type="button" class="toolbar-btn" onclick="clearContent()" title="Clear All">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="editor-content">
+                            <textarea id="compositionContent" name="content" required placeholder="Enter your composition here...
+
+Examples:
+
+For Chords:
+[Verse]
+C       Am      F       G
+This is how the verse goes
+C       Am      F       G
+With these chord progressions
+
+[Chorus]
+F       C       G       Am
+This is the chorus part
+F       C       G       C
+With different chord changes
+
+For Guitar Tabs:
+e|--0--2--3--2--0--|
+B|--1--3--3--3--1--|
+G|--0--2--0--2--0--|
+D|--2--0--0--0--2--|
+A|--3----------3--|
+E|----------------|
+
+For Piano:
+Right Hand: C - E - G - C
+Left Hand:  C - - - C
+            F - A - C - F
+            G - B - D - G"></textarea>
+                            
+                            <div class="editor-preview" id="contentPreview" style="display: none;">
+                                <!-- Live preview will appear here -->
+                            </div>
+                        </div>
+                        
+                        <div class="editor-controls">
+                            <button type="button" class="toggle-btn" onclick="togglePreview()">
+                                <i class="fas fa-eye"></i> Toggle Preview
+                            </button>
+                            <div class="editor-info">
+                                <span class="character-count">
+                                    <span id="contentCharCount">0</span> characters
+                                </span>
+                                <span class="line-count">
+                                    <span id="contentLineCount">0</span> lines
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="form-section">
+                    <h3>Additional Information</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="compositionKey">Key Signature</label>
+                            <select id="compositionKey" name="key">
+                                <option value="">Select key (optional)</option>
+                                <option value="C">C Major</option>
+                                <option value="C#">C# Major</option>
+                                <option value="Db">Db Major</option>
+                                <option value="D">D Major</option>
+                                <option value="D#">D# Major</option>
+                                <option value="Eb">Eb Major</option>
+                                <option value="E">E Major</option>
+                                <option value="F">F Major</option>
+                                <option value="F#">F# Major</option>
+                                <option value="Gb">Gb Major</option>
+                                <option value="G">G Major</option>
+                                <option value="G#">G# Major</option>
+                                <option value="Ab">Ab Major</option>
+                                <option value="A">A Major</option>
+                                <option value="A#">A# Major</option>
+                                <option value="Bb">Bb Major</option>
+                                <option value="B">B Major</option>
+                                <option value="Am">A Minor</option>
+                                <option value="Bm">B Minor</option>
+                                <option value="Cm">C Minor</option>
+                                <option value="Dm">D Minor</option>
+                                <option value="Em">E Minor</option>
+                                <option value="Fm">F Minor</option>
+                                <option value="Gm">G Minor</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="compositionTempo">Tempo (BPM)</label>
+                            <input type="number" id="compositionTempo" name="tempo" min="40" max="200" placeholder="e.g. 120">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="compositionCapo">Capo Position</label>
+                            <select id="compositionCapo" name="capo">
+                                <option value="">No capo</option>
+                                <option value="1">1st fret</option>
+                                <option value="2">2nd fret</option>
+                                <option value="3">3rd fret</option>
+                                <option value="4">4th fret</option>
+                                <option value="5">5th fret</option>
+                                <option value="6">6th fret</option>
+                                <option value="7">7th fret</option>
+                                <option value="8">8th fret</option>
+                                <option value="9">9th fret</option>
+                                <option value="10">10th fret</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="compositionTuning">Tuning</label>
+                            <input type="text" id="compositionTuning" name="tuning" placeholder="e.g. Standard, Drop D, DADGAD">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="compositionTags">Tags</label>
+                        <input type="text" id="compositionTags" name="tags" placeholder="Enter tags separated by commas (e.g. fingerpicking, strumming, jazz, blues)">
+                        <small class="form-help">Add relevant tags to help others find your composition</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="compositionNotes">Performance Notes</label>
+                        <textarea id="compositionNotes" name="notes" rows="3" placeholder="Any special notes about playing this composition, tips for beginners, or performance suggestions..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Visibility Settings -->
+                <div class="form-section">
+                    <h3>Visibility & Sharing</h3>
+                    
+                    <div class="visibility-options">
+                        <label class="radio-option">
+                            <input type="radio" name="visibility" value="public" checked>
+                            <span class="radio-custom"></span>
+                            <div class="option-content">
+                                <strong>Public</strong>
+                                <p>Anyone can view and discover this composition</p>
+                            </div>
+                        </label>
+                        
+                        <label class="radio-option">
+                            <input type="radio" name="visibility" value="unlisted">
+                            <span class="radio-custom"></span>
+                            <div class="option-content">
+                                <strong>Unlisted</strong>
+                                <p>Only people with the link can view this composition</p>
+                            </div>
+                        </label>
+                        
+                        <label class="radio-option">
+                            <input type="radio" name="visibility" value="private">
+                            <span class="radio-custom"></span>
+                            <div class="option-content">
+                                <strong>Private</strong>
+                                <p>Only you can view this composition</p>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="allowComments" name="allowComments" checked>
+                                <span class="checkmark"></span>
+                                Allow comments on this composition
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="allowDownload" name="allowDownload">
+                                <span class="checkmark"></span>
+                                Allow others to download this composition
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="saveDraft()">
+                        <i class="fas fa-save"></i> Save as Draft
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="previewComposition()">
+                        <i class="fas fa-eye"></i> Preview
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create Composition
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Template Selection Modal -->
+    <div id="templateModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Choose Template</h3>
+                <button class="modal-close" onclick="closeModal('templateModal')">&times;</button>
+            </div>
+            
+            <div class="template-grid">
+                <div class="template-card" onclick="selectTemplate('guitar-chords')">
+                    <i class="fas fa-guitar"></i>
+                    <h4>Guitar Chords</h4>
+                    <p>Basic chord progression template</p>
+                </div>
+                
+                <div class="template-card" onclick="selectTemplate('guitar-tabs')">
+                    <i class="fas fa-guitar"></i>
+                    <h4>Guitar Tabs</h4>
+                    <p>Tablature format template</p>
+                </div>
+                
+                <div class="template-card" onclick="selectTemplate('piano-chords')">
+                    <i class="fas fa-piano"></i>
+                    <h4>Piano Chords</h4>
+                    <p>Piano chord notation template</p>
+                </div>
+                
+                <div class="template-card" onclick="selectTemplate('lyrics-chords')">
+                    <i class="fas fa-microphone"></i>
+                    <h4>Lyrics with Chords</h4>
+                    <p>Combined lyrics and chord template</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal large">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Composition Preview</h3>
+                <button class="modal-close" onclick="closeModal('previewModal')">&times;</button>
+            </div>
+            
+            <div class="preview-content">
+                <div class="preview-header">
+                    <h2 id="previewTitle">Composition Title</h2>
+                    <div class="preview-meta">
+                        <span id="previewInstrument">Instrument</span>
+                        <span id="previewType">Type</span>
+                        <span id="previewDifficulty">Difficulty</span>
+                    </div>
+                    <div id="previewSongInfo" class="preview-song">
+                        <span>For: </span>
+                        <strong id="previewSongTitle">Song Title</strong>
+                        <span> by </span>
+                        <strong id="previewSongArtist">Artist</strong>
+                    </div>
+                </div>
+                
+                <div class="preview-composition">
+                    <h4>Composition Content</h4>
+                    <div id="previewContent" class="composition-display">
+                        <!-- Composition content will be shown here -->
+                    </div>
+                </div>
+                
+                <div class="preview-description" id="previewDescriptionSection" style="display: none;">
+                    <h4>Description</h4>
+                    <p id="previewDescription"></p>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeModal('previewModal')">Close Preview</button>
+                <button class="btn btn-primary" onclick="submitFromPreview()">Create Composition</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Creating composition...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/add-composition.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Song - Ly Music Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-music"></i>
+                    <span>Ly</span>
+                </a>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="songs.html" class="nav-link">Songs</a>
+                <a href="compositions.html" class="nav-link">Compositions</a>
+                <a href="discover.html" class="nav-link">Discover</a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" id="globalSearch" placeholder="Search..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <div class="user-menu">
+                    <div class="user-avatar" onclick="toggleUserDropdown()">
+                        <img src="" alt="User Avatar" id="userAvatar">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="dashboard.html" class="dropdown-item">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Add Song Form -->
+    <div class="add-song-container">
+        <div class="container">
+            <div class="form-header">
+                <div class="breadcrumb">
+                    <a href="dashboard.html">Dashboard</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Add Song</span>
+                </div>
+                <h1>Add New Song</h1>
+                <p>Share your favorite song with the community. Provide lyrics and details to help others discover and create compositions.</p>
+            </div>
+
+            <form id="addSongForm" class="add-song-form">
+                <!-- Basic Information -->
+                <div class="form-section">
+                    <h3>Basic Information</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="songTitle">Song Title *</label>
+                            <input type="text" id="songTitle" name="title" required placeholder="Enter song title">
+                        </div>
+                        <div class="form-group">
+                            <label for="songArtist">Artist *</label>
+                            <input type="text" id="songArtist" name="artist" required placeholder="Enter artist name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="songAlbum">Album</label>
+                            <input type="text" id="songAlbum" name="album" placeholder="Enter album name (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label for="songYear">Release Year</label>
+                            <input type="number" id="songYear" name="year" min="1900" max="2030" placeholder="e.g. 2023">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="songGenre">Genre *</label>
+                            <select id="songGenre" name="genre" required>
+                                <option value="">Select a genre</option>
+                                <option value="pop">Pop</option>
+                                <option value="rock">Rock</option>
+                                <option value="jazz">Jazz</option>
+                                <option value="classical">Classical</option>
+                                <option value="country">Country</option>
+                                <option value="hip-hop">Hip Hop</option>
+                                <option value="electronic">Electronic</option>
+                                <option value="folk">Folk</option>
+                                <option value="blues">Blues</option>
+                                <option value="reggae">Reggae</option>
+                                <option value="metal">Metal</option>
+                                <option value="indie">Indie</option>
+                                <option value="r&b">R&B</option>
+                                <option value="soul">Soul</option>
+                                <option value="funk">Funk</option>
+                                <option value="world">World Music</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="songLanguage">Language *</label>
+                            <select id="songLanguage" name="language" required>
+                                <option value="">Select language</option>
+                                <option value="english">English</option>
+                                <option value="spanish">Spanish</option>
+                                <option value="french">French</option>
+                                <option value="german">German</option>
+                                <option value="italian">Italian</option>
+                                <option value="portuguese">Portuguese</option>
+                                <option value="chinese">Chinese</option>
+                                <option value="japanese">Japanese</option>
+                                <option value="korean">Korean</option>
+                                <option value="hindi">Hindi</option>
+                                <option value="arabic">Arabic</option>
+                                <option value="russian">Russian</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="songDuration">Duration</label>
+                        <input type="text" id="songDuration" name="duration" placeholder="e.g. 3:45" pattern="[0-9]:[0-5][0-9]">
+                        <small class="form-help">Format: MM:SS (e.g. 3:45)</small>
+                    </div>
+                </div>
+
+                <!-- Instruments -->
+                <div class="form-section">
+                    <h3>Instruments</h3>
+                    <p class="section-description">Select the instruments that are prominently featured in this song. This helps musicians find songs for their instruments.</p>
+                    
+                    <div class="instruments-grid">
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="guitar">
+                            <div class="checkbox-content">
+                                <i class="fas fa-guitar"></i>
+                                <span>Guitar</span>
+                            </div>
+                        </label>
+                        
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="piano">
+                            <div class="checkbox-content">
+                                <i class="fas fa-piano"></i>
+                                <span>Piano</span>
+                            </div>
+                        </label>
+                        
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="violin">
+                            <div class="checkbox-content">
+                                <i class="fas fa-violin"></i>
+                                <span>Violin</span>
+                            </div>
+                        </label>
+                        
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="drums">
+                            <div class="checkbox-content">
+                                <i class="fas fa-drum"></i>
+                                <span>Drums</span>
+                            </div>
+                        </label>
+                        
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="vocals">
+                            <div class="checkbox-content">
+                                <i class="fas fa-microphone"></i>
+                                <span>Vocals</span>
+                            </div>
+                        </label>
+                        
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="bass">
+                            <div class="checkbox-content">
+                                <i class="fas fa-guitar"></i>
+                                <span>Bass</span>
+                            </div>
+                        </label>
+                        
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="saxophone">
+                            <div class="checkbox-content">
+                                <i class="fas fa-saxophone"></i>
+                                <span>Saxophone</span>
+                            </div>
+                        </label>
+                        
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="trumpet">
+                            <div class="checkbox-content">
+                                <i class="fas fa-trumpet"></i>
+                                <span>Trumpet</span>
+                            </div>
+                        </label>
+                        
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="flute">
+                            <div class="checkbox-content">
+                                <i class="fas fa-flute"></i>
+                                <span>Flute</span>
+                            </div>
+                        </label>
+                        
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="cello">
+                            <div class="checkbox-content">
+                                <i class="fas fa-cello"></i>
+                                <span>Cello</span>
+                            </div>
+                        </label>
+                        
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="harmonica">
+                            <div class="checkbox-content">
+                                <i class="fas fa-harmonica"></i>
+                                <span>Harmonica</span>
+                            </div>
+                        </label>
+                        
+                        <label class="instrument-checkbox">
+                            <input type="checkbox" name="instruments" value="other">
+                            <div class="checkbox-content">
+                                <i class="fas fa-music"></i>
+                                <span>Other</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Lyrics -->
+                <div class="form-section">
+                    <h3>Lyrics *</h3>
+                    <p class="section-description">Enter the complete lyrics of the song. Use proper line breaks and formatting.</p>
+                    
+                    <div class="lyrics-editor">
+                        <div class="editor-toolbar">
+                            <button type="button" class="toolbar-btn" onclick="formatLyrics('bold')" title="Bold">
+                                <i class="fas fa-bold"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="formatLyrics('italic')" title="Italic">
+                                <i class="fas fa-italic"></i>
+                            </button>
+                            <div class="toolbar-divider"></div>
+                            <button type="button" class="toolbar-btn" onclick="insertSection('verse')" title="Add Verse">
+                                [Verse]
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertSection('chorus')" title="Add Chorus">
+                                [Chorus]
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertSection('bridge')" title="Add Bridge">
+                                [Bridge]
+                            </button>
+                            <div class="toolbar-divider"></div>
+                            <button type="button" class="toolbar-btn" onclick="clearLyrics()" title="Clear All">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        
+                        <textarea id="songLyrics" name="lyrics" required placeholder="Enter the song lyrics here...
+
+Example format:
+[Verse 1]
+Line 1 of verse
+Line 2 of verse
+
+[Chorus]
+Chorus line 1
+Chorus line 2
+
+[Verse 2]
+Second verse lines...
+
+[Chorus]
+Repeat chorus...
+
+[Bridge]
+Bridge section..."></textarea>
+                        
+                        <div class="editor-info">
+                            <span class="character-count">
+                                <span id="charCount">0</span> characters
+                            </span>
+                            <span class="line-count">
+                                <span id="lineCount">0</span> lines
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="form-section">
+                    <h3>Additional Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="songDescription">Description</label>
+                        <textarea id="songDescription" name="description" rows="4" placeholder="Tell us about this song... What makes it special? Any interesting facts or stories?"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="songMood">Mood/Theme</label>
+                            <select id="songMood" name="mood">
+                                <option value="">Select mood (optional)</option>
+                                <option value="happy">Happy</option>
+                                <option value="sad">Sad</option>
+                                <option value="energetic">Energetic</option>
+                                <option value="calm">Calm</option>
+                                <option value="romantic">Romantic</option>
+                                <option value="melancholic">Melancholic</option>
+                                <option value="uplifting">Uplifting</option>
+                                <option value="nostalgic">Nostalgic</option>
+                                <option value="dramatic">Dramatic</option>
+                                <option value="peaceful">Peaceful</option>
+                                <option value="intense">Intense</option>
+                                <option value="playful">Playful</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="songTempo">Tempo</label>
+                            <select id="songTempo" name="tempo">
+                                <option value="">Select tempo (optional)</option>
+                                <option value="slow">Slow (60-90 BPM)</option>
+                                <option value="moderate">Moderate (90-120 BPM)</option>
+                                <option value="fast">Fast (120-160 BPM)</option>
+                                <option value="very-fast">Very Fast (160+ BPM)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="songTags">Tags</label>
+                        <input type="text" id="songTags" name="tags" placeholder="Enter tags separated by commas (e.g. love, heartbreak, dance, acoustic)">
+                        <small class="form-help">Add relevant tags to help others discover this song</small>
+                    </div>
+                </div>
+
+                <!-- External Links -->
+                <div class="form-section">
+                    <h3>External Links</h3>
+                    <p class="section-description">Provide links to official sources where people can listen to this song.</p>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="youtubeUrl">YouTube URL</label>
+                            <input type="url" id="youtubeUrl" name="youtubeUrl" placeholder="https://youtube.com/watch?v=...">
+                        </div>
+                        <div class="form-group">
+                            <label for="spotifyUrl">Spotify URL</label>
+                            <input type="url" id="spotifyUrl" name="spotifyUrl" placeholder="https://open.spotify.com/track/...">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="appleMusicUrl">Apple Music URL</label>
+                            <input type="url" id="appleMusicUrl" name="appleMusicUrl" placeholder="https://music.apple.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label for="soundcloudUrl">SoundCloud URL</label>
+                            <input type="url" id="soundcloudUrl" name="soundcloudUrl" placeholder="https://soundcloud.com/...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="saveDraft()">
+                        <i class="fas fa-save"></i> Save as Draft
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="previewSong()">
+                        <i class="fas fa-eye"></i> Preview
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Song
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal large">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Song Preview</h3>
+                <button class="modal-close" onclick="closeModal('previewModal')">&times;</button>
+            </div>
+            
+            <div class="preview-content">
+                <div class="preview-header">
+                    <h2 id="previewTitle">Song Title</h2>
+                    <h3 id="previewArtist">Artist Name</h3>
+                    <div class="preview-meta">
+                        <span id="previewGenre">Genre</span>
+                        <span id="previewYear">Year</span>
+                        <span id="previewLanguage">Language</span>
+                    </div>
+                </div>
+                
+                <div class="preview-instruments" id="previewInstruments">
+                    <!-- Instruments will be shown here -->
+                </div>
+                
+                <div class="preview-lyrics">
+                    <h4>Lyrics</h4>
+                    <div id="previewLyricsContent">
+                        <!-- Lyrics will be shown here -->
+                    </div>
+                </div>
+                
+                <div class="preview-description" id="previewDescriptionSection" style="display: none;">
+                    <h4>Description</h4>
+                    <p id="previewDescription"></p>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeModal('previewModal')">Close Preview</button>
+                <button class="btn btn-primary" onclick="submitFromPreview()">Add Song</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Adding song...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/add-song.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Songs - Ly Music Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-music"></i>
+                    <span>Ly</span>
+                </a>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="songs.html" class="nav-link active">Songs</a>
+                <a href="compositions.html" class="nav-link">Compositions</a>
+                <a href="discover.html" class="nav-link">Discover</a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" id="globalSearch" placeholder="Search songs..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-outline" onclick="showLoginModal()">Login</button>
+                    <button class="btn btn-primary" onclick="showRegisterModal()">Sign Up</button>
+                </div>
+                
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <div class="user-avatar" onclick="toggleUserDropdown()">
+                        <img src="" alt="User Avatar" id="userAvatar">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="dashboard.html" class="dropdown-item">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                        <a href="add-song.html" class="dropdown-item" data-auth-required>
+                            <i class="fas fa-plus"></i> Add Song
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="page-title">Discover Songs</h1>
+                <p class="page-description">Find songs by your favorite artists, genres, and instruments</p>
+            </div>
+            
+            <div class="header-actions" data-auth-required style="display: none;">
+                <a href="add-song.html" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add New Song
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label>Genre</label>
+                    <select id="genreFilter">
+                        <option value="">All Genres</option>
+                        <option value="pop">Pop</option>
+                        <option value="rock">Rock</option>
+                        <option value="jazz">Jazz</option>
+                        <option value="classical">Classical</option>
+                        <option value="country">Country</option>
+                        <option value="hip-hop">Hip-Hop</option>
+                        <option value="electronic">Electronic</option>
+                        <option value="folk">Folk</option>
+                        <option value="blues">Blues</option>
+                        <option value="r&b">R&B</option>
+                        <option value="indie">Indie</option>
+                        <option value="alternative">Alternative</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Instrument</label>
+                    <select id="instrumentFilter">
+                        <option value="">All Instruments</option>
+                        <option value="guitar">Guitar</option>
+                        <option value="piano">Piano</option>
+                        <option value="violin">Violin</option>
+                        <option value="drums">Drums</option>
+                        <option value="bass">Bass</option>
+                        <option value="flute">Flute</option>
+                        <option value="trumpet">Trumpet</option>
+                        <option value="saxophone">Saxophone</option>
+                        <option value="vocals">Vocals</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Language</label>
+                    <select id="languageFilter">
+                        <option value="">All Languages</option>
+                        <option value="english">English</option>
+                        <option value="spanish">Spanish</option>
+                        <option value="french">French</option>
+                        <option value="german">German</option>
+                        <option value="italian">Italian</option>
+                        <option value="portuguese">Portuguese</option>
+                        <option value="japanese">Japanese</option>
+                        <option value="korean">Korean</option>
+                        <option value="hindi">Hindi</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Sort By</label>
+                    <select id="sortFilter">
+                        <option value="createdAt">Newest</option>
+                        <option value="title">Title A-Z</option>
+                        <option value="artist">Artist A-Z</option>
+                        <option value="views">Most Viewed</option>
+                        <option value="compositionsCount">Most Compositions</option>
+                    </select>
+                </div>
+
+                <div class="filter-actions">
+                    <button class="btn btn-outline" onclick="clearFilters()">Clear</button>
+                    <button class="btn btn-primary" onclick="applyFilters()">Apply</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Songs Grid -->
+    <section class="songs-content">
+        <div class="container">
+            <div class="content-header">
+                <div class="results-info">
+                    <span id="resultsCount">Loading songs...</span>
+                </div>
+                
+                <div class="view-options">
+                    <button class="view-btn active" data-view="grid">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button class="view-btn" data-view="list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state">
+                <div class="loading-skeleton">
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                </div>
+            </div>
+
+            <!-- Songs Container -->
+            <div id="songsContainer" class="songs-grid" style="display: none;">
+                <!-- Songs will be loaded dynamically -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-content">
+                    <i class="fas fa-music"></i>
+                    <h3>No Songs Found</h3>
+                    <p>Try adjusting your filters or search terms</p>
+                    <button class="btn btn-primary" onclick="clearFilters()">Clear Filters</button>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div id="pagination" class="pagination" style="display: none;">
+                <button class="btn btn-outline" id="prevBtn" onclick="previousPage()">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                
+                <div class="page-numbers" id="pageNumbers">
+                    <!-- Page numbers will be generated -->
+                </div>
+                
+                <button class="btn btn-outline" id="nextBtn" onclick="nextPage()">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auth Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome Back</h3>
+                <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+            
+            <button class="btn btn-google" onclick="loginWithGoogle()">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            
+            <p class="auth-switch">
+                Don't have an account? 
+                <a href="#" onclick="switchToRegister()">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Join the Community</h3>
+                <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="registerUsername" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="registerEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="registerPassword" placeholder="Password (min 6 characters)" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+            
+            <button class="btn btn-google" onclick="loginWithGoogle()">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            
+            <p class="auth-switch">
+                Already have an account? 
+                <a href="#" onclick="switchToLogin()">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/songs.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

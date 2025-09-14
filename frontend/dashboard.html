@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Ly Music Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-music"></i>
+                    <span>Ly</span>
+                </a>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="songs.html" class="nav-link">Songs</a>
+                <a href="compositions.html" class="nav-link">Compositions</a>
+                <a href="discover.html" class="nav-link">Discover</a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" id="globalSearch" placeholder="Search..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <div class="user-menu">
+                    <div class="user-avatar" onclick="toggleUserDropdown()">
+                        <img src="" alt="User Avatar" id="userAvatar">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="dashboard.html" class="dropdown-item active">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <div class="header-content">
+                    <h1>Dashboard</h1>
+                    <p>Welcome back, <span id="userName">User</span>! Here's your activity overview.</p>
+                </div>
+                <div class="header-actions">
+                    <a href="add-song.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Song
+                    </a>
+                    <a href="add-composition.html" class="btn btn-outline">
+                        <i class="fas fa-file-music"></i> Create Composition
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalSongs">0</h3>
+                        <p>Total Songs</p>
+                        <span class="stat-change positive" id="songsChange">+0 this month</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-music"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalCompositions">0</h3>
+                        <p>Compositions</p>
+                        <span class="stat-change positive" id="compositionsChange">+0 this month</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalViews">0</h3>
+                        <p>Total Views</p>
+                        <span class="stat-change positive" id="viewsChange">+0 this month</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalLikes">0</h3>
+                        <p>Total Likes</p>
+                        <span class="stat-change positive" id="likesChange">+0 this month</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalFollowers">0</h3>
+                        <p>Followers</p>
+                        <span class="stat-change positive" id="followersChange">+0 this month</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="averageRating">0.0</h3>
+                        <p>Avg. Rating</p>
+                        <span class="stat-change neutral" id="ratingChange">No change</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Recent Activity -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Recent Activity</h3>
+                        <a href="profile.html?tab=activity" class="view-all-link">View All</a>
+                    </div>
+                    <div class="card-content">
+                        <div id="recentActivity" class="activity-list">
+                            <!-- Recent activity items will be loaded here -->
+                        </div>
+                        
+                        <div id="noRecentActivity" class="empty-state" style="display: none;">
+                            <i class="fas fa-clock"></i>
+                            <p>No recent activity</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Chart -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Analytics</h3>
+                        <select id="analyticsFilter">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                        </select>
+                    </div>
+                    <div class="card-content">
+                        <canvas id="analyticsChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top Performing Content -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Top Performing</h3>
+                        <select id="topContentFilter">
+                            <option value="songs">Songs</option>
+                            <option value="compositions">Compositions</option>
+                        </select>
+                    </div>
+                    <div class="card-content">
+                        <div id="topContent" class="top-content-list">
+                            <!-- Top performing content will be loaded here -->
+                        </div>
+                        
+                        <div id="noTopContent" class="empty-state" style="display: none;">
+                            <i class="fas fa-chart-line"></i>
+                            <p>No content available</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Quick Actions</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="quick-actions">
+                            <a href="add-song.html" class="quick-action">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Add New Song</span>
+                            </a>
+                            <a href="add-composition.html" class="quick-action">
+                                <i class="fas fa-file-plus"></i>
+                                <span>Create Composition</span>
+                            </a>
+                            <a href="profile.html" class="quick-action">
+                                <i class="fas fa-user-edit"></i>
+                                <span>Edit Profile</span>
+                            </a>
+                            <a href="discover.html" class="quick-action">
+                                <i class="fas fa-compass"></i>
+                                <span>Discover Music</span>
+                            </a>
+                            <a href="#" class="quick-action" onclick="exportData()">
+                                <i class="fas fa-download"></i>
+                                <span>Export Data</span>
+                            </a>
+                            <a href="#" class="quick-action" onclick="viewAnalytics()">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>View Analytics</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Followers Activity -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Followers Activity</h3>
+                        <a href="profile.html?tab=followers" class="view-all-link">View All</a>
+                    </div>
+                    <div class="card-content">
+                        <div id="followersActivity" class="followers-activity-list">
+                            <!-- Followers activity will be loaded here -->
+                        </div>
+                        
+                        <div id="noFollowersActivity" class="empty-state" style="display: none;">
+                            <i class="fas fa-users"></i>
+                            <p>No follower activity</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Engagement Metrics -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Engagement</h3>
+                        <select id="engagementFilter">
+                            <option value="today">Today</option>
+                            <option value="week" selected>This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
+                    <div class="card-content">
+                        <div class="engagement-metrics">
+                            <div class="metric">
+                                <div class="metric-label">Views</div>
+                                <div class="metric-value" id="periodViews">0</div>
+                                <div class="metric-change positive" id="viewsChangePercent">+0%</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-label">Likes</div>
+                                <div class="metric-value" id="periodLikes">0</div>
+                                <div class="metric-change positive" id="likesChangePercent">+0%</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-label">Comments</div>
+                                <div class="metric-value" id="periodComments">0</div>
+                                <div class="metric-change positive" id="commentsChangePercent">+0%</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-label">Shares</div>
+                                <div class="metric-value" id="periodShares">0</div>
+                                <div class="metric-change positive" id="sharesChangePercent">+0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Comments -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Recent Comments</h3>
+                        <a href="#" class="view-all-link" onclick="viewAllComments()">View All</a>
+                    </div>
+                    <div class="card-content">
+                        <div id="recentComments" class="comments-list">
+                            <!-- Recent comments will be loaded here -->
+                        </div>
+                        
+                        <div id="noRecentComments" class="empty-state" style="display: none;">
+                            <i class="fas fa-comments"></i>
+                            <p>No recent comments</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Recommendations</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="recommendations">
+                            <div class="recommendation">
+                                <i class="fas fa-lightbulb"></i>
+                                <div class="recommendation-content">
+                                    <h4>Optimize Your Profile</h4>
+                                    <p>Add a bio and profile picture to increase engagement by up to 40%.</p>
+                                    <a href="profile.html" class="recommendation-action">Update Profile</a>
+                                </div>
+                            </div>
+                            
+                            <div class="recommendation">
+                                <i class="fas fa-users"></i>
+                                <div class="recommendation-content">
+                                    <h4>Connect with Musicians</h4>
+                                    <p>Follow other musicians to grow your network and discover new music.</p>
+                                    <a href="discover.html" class="recommendation-action">Discover Users</a>
+                                </div>
+                            </div>
+                            
+                            <div class="recommendation">
+                                <i class="fas fa-share"></i>
+                                <div class="recommendation-content">
+                                    <h4>Share Your Content</h4>
+                                    <p>Share your songs and compositions on social media to reach more listeners.</p>
+                                    <a href="#" class="recommendation-action" onclick="shareProfile()">Share Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Loading dashboard...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

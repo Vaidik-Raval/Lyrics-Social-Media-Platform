@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Composition Details - Ly Music Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-music"></i>
+                    <span>Ly</span>
+                </a>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="songs.html" class="nav-link">Songs</a>
+                <a href="compositions.html" class="nav-link">Compositions</a>
+                <a href="discover.html" class="nav-link">Discover</a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" id="globalSearch" placeholder="Search..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-outline" onclick="showLoginModal()">Login</button>
+                    <button class="btn btn-primary" onclick="showRegisterModal()">Sign Up</button>
+                </div>
+                
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <div class="user-avatar" onclick="toggleUserDropdown()">
+                        <img src="" alt="User Avatar" id="userAvatar">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="dashboard.html" class="dropdown-item">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="loading-state" style="margin-top: 100px;">
+        <div class="container">
+            <div class="loading-spinner"></div>
+            <p>Loading composition details...</p>
+        </div>
+    </div>
+
+    <!-- Composition Details -->
+    <div id="compositionContent" style="display: none;">
+        <!-- Composition Header -->
+        <section class="composition-header">
+            <div class="container">
+                <div class="composition-hero">
+                    <div class="composition-info">
+                        <div class="breadcrumb">
+                            <a href="compositions.html">Compositions</a>
+                            <i class="fas fa-chevron-right"></i>
+                            <span id="compositionBreadcrumb">Composition Details</span>
+                        </div>
+                        
+                        <h1 id="compositionTitle" class="composition-title">Loading...</h1>
+                        <div class="composition-subtitle">
+                            <span>For: </span>
+                            <a href="#" id="originalSongLink" class="song-link">Loading...</a>
+                            <span> by </span>
+                            <span id="originalArtist">Loading...</span>
+                        </div>
+                        
+                        <div class="composition-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-music"></i>
+                                <span id="compositionInstrument">Loading...</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-layer-group"></i>
+                                <span id="compositionType">Loading...</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-signal"></i>
+                                <span id="compositionDifficulty">Loading...</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <a href="#" id="composerLink" class="composer-link">Loading...</a>
+                            </div>
+                        </div>
+                        
+                        <div class="composition-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span id="compositionLikes">0</span>
+                                <small>Likes</small>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-down"></i>
+                                <span id="compositionDislikes">0</span>
+                                <small>Dislikes</small>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-eye"></i>
+                                <span id="compositionViews">0</span>
+                                <small>Views</small>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-star"></i>
+                                <span id="compositionRating">0.0</span>
+                                <small>Rating</small>
+                            </div>
+                        </div>
+                        
+                        <div class="composition-description" id="compositionDescription">
+                            <!-- Description will be loaded here -->
+                        </div>
+                        
+                        <div class="composition-actions">
+                            <button class="btn btn-primary" onclick="toggleLike()" id="likeBtn" data-auth-required style="display: none;">
+                                <i class="fas fa-thumbs-up"></i> Like
+                            </button>
+                            <button class="btn btn-outline" onclick="toggleDislike()" id="dislikeBtn" data-auth-required style="display: none;">
+                                <i class="fas fa-thumbs-down"></i> Dislike
+                            </button>
+                            <button class="btn btn-outline" onclick="copyComposition()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="btn btn-outline" onclick="downloadComposition()">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                            <button class="btn btn-outline" onclick="editComposition()" id="editBtn" style="display: none;">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteComposition()" id="deleteBtn" style="display: none;">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Composition Content -->
+        <section class="composition-content">
+            <div class="container">
+                <div class="content-layout">
+                    <!-- Main Content -->
+                    <div class="main-content">
+                        <div class="composition-viewer">
+                            <div class="viewer-header">
+                                <h3>Composition Content</h3>
+                                <div class="viewer-controls">
+                                    <button class="btn btn-outline btn-sm" onclick="toggleFullscreen()">
+                                        <i class="fas fa-expand"></i> Fullscreen
+                                    </button>
+                                    <button class="btn btn-outline btn-sm" onclick="printComposition()">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="composition-display" id="compositionDisplay">
+                                <div class="loading-placeholder">
+                                    <i class="fas fa-music"></i>
+                                    <p>Loading composition content...</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Comments Section -->
+                        <div class="comments-section" data-auth-required style="display: none;">
+                            <div class="comments-header">
+                                <h3>Comments</h3>
+                                <span class="comments-count" id="commentsCount">0 comments</span>
+                            </div>
+                            
+                            <div class="comment-form" id="commentForm">
+                                <div class="comment-input-group">
+                                    <div class="user-avatar">
+                                        <img src="" alt="Your Avatar" id="currentUserAvatar">
+                                    </div>
+                                    <div class="comment-input">
+                                        <textarea id="commentText" placeholder="Add a comment..." rows="3"></textarea>
+                                        <div class="comment-actions">
+                                            <button class="btn btn-outline btn-sm" onclick="cancelComment()">Cancel</button>
+                                            <button class="btn btn-primary btn-sm" onclick="postComment()">Comment</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="comments-list" id="commentsList">
+                                <!-- Comments will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sidebar -->
+                    <div class="sidebar">
+                        <!-- Related Compositions -->
+                        <div class="sidebar-card">
+                            <h4>Related Compositions</h4>
+                            <div class="related-compositions" id="relatedCompositions">
+                                <!-- Related compositions will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Composer Info -->
+                        <div class="sidebar-card">
+                            <h4>About the Composer</h4>
+                            <div class="composer-info" id="composerInfo">
+                                <div class="composer-avatar">
+                                    <img id="composerAvatar" src="" alt="Composer Avatar">
+                                </div>
+                                <div class="composer-details">
+                                    <h5 id="composerName">Loading...</h5>
+                                    <p id="composerBio">Loading...</p>
+                                    <div class="composer-stats">
+                                        <div class="stat">
+                                            <span id="composerCompositions">0</span>
+                                            <small>Compositions</small>
+                                        </div>
+                                        <div class="stat">
+                                            <span id="composerFollowers">0</span>
+                                            <small>Followers</small>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm btn-full" onclick="followComposer()" id="followBtn" data-auth-required style="display: none;">
+                                        Follow
+                                    </button>
+                                    <a href="#" id="composerProfileLink" class="btn btn-outline btn-sm btn-full">View Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Song Info -->
+                        <div class="sidebar-card">
+                            <h4>Original Song</h4>
+                            <div class="song-info" id="sidebarSongInfo">
+                                <div class="song-cover">
+                                    <i class="fas fa-music"></i>
+                                </div>
+                                <div class="song-details">
+                                    <h5 id="sidebarSongTitle">Loading...</h5>
+                                    <p id="sidebarSongArtist">Loading...</p>
+                                    <div class="song-meta">
+                                        <small id="sidebarSongGenre">Loading...</small>
+                                        <small id="sidebarSongYear">Loading...</small>
+                                    </div>
+                                    <a href="#" id="sidebarSongLink" class="btn btn-outline btn-sm btn-full">View Song</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="error-state" style="display: none; margin-top: 100px;">
+        <div class="container">
+            <div class="error-content">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Composition Not Found</h3>
+                <p>The composition you're looking for doesn't exist or has been removed.</p>
+                <a href="compositions.html" class="btn btn-primary">Browse Compositions</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Modal -->
+    <div id="fullscreenModal" class="fullscreen-modal">
+        <div class="fullscreen-header">
+            <h3 id="fullscreenTitle">Composition Viewer</h3>
+            <button class="btn btn-outline" onclick="exitFullscreen()">
+                <i class="fas fa-times"></i> Exit Fullscreen
+            </button>
+        </div>
+        <div class="fullscreen-content" id="fullscreenContent">
+            <!-- Fullscreen composition content -->
+        </div>
+    </div>
+
+    <!-- Auth Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome Back</h3>
+                <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+            
+            <button class="btn btn-google" onclick="loginWithGoogle()">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            
+            <p class="auth-switch">
+                Don't have an account? 
+                <a href="#" onclick="switchToRegister()">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Join the Community</h3>
+                <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="registerUsername" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="registerEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="registerPassword" placeholder="Password (min 6 characters)" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+            
+            <button class="btn btn-google" onclick="loginWithGoogle()">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            
+            <p class="auth-switch">
+                Already have an account? 
+                <a href="#" onclick="switchToLogin()">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/composition-details.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
